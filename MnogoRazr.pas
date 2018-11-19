@@ -1,6 +1,6 @@
 ﻿type Tlong=record
        countElem: integer;
-       Long :  array [1..100] of string;
+       Long :  array [1..101] of string;
      end;
      
 //..............................................................................Удаление ведущих нулей
@@ -84,18 +84,18 @@ begin
 end;
 
 //..............................................................................Печать числа
-procedure writeTlong(A:Tlong);
+procedure PrintTlong(A:Tlong);
 var i, j : integer;
     s : string;
     checkZiro : boolean;
 begin
-  write('Число элементов в массиве "', A.countElem,'". ');
   checkZiro := true;
   for i := A.countElem downto 1 do
   begin
     deliteZiro(A.Long[i],checkZiro);
     write(A.Long[i]);
   end;
+  write('". Число элементов в массиве "', A.countElem,'". ');
   writeln;
 end;
 
@@ -225,33 +225,117 @@ begin
   end;
 end;
 
-{
-procedure 
-var
+//..............................................................................Сравнение двух чисел. Если TRUE, то числа равные. Если FALSE, то числа разные
+function EQLong(A:Tlong;B:Tlong):boolean;
+var i, j : integer;
+    err : boolean;
 begin
-
+  err := true;
+  if A.countElem = B.countElem
+  then
+    for i := A.countElem downto 1 do
+      for j := 1 to 3 do
+        if err = false
+        then
+          EQLong := false
+        else
+          if CharInt(A.Long[i][j]) = CharInt(B.Long[i][j])
+          then
+            EQLong := true
+          else
+            err := false
+  else
+    EQLong := false
 end;
 
+//..............................................................................Сравнение двух чисел. Если TRUE, то первое число больше. Если FALSE, то второе число больше
+function LessLong(A:Tlong;B:Tlong;EQLong:boolean):boolean;
+var i, j : integer;
+    LessInput : byte;
+begin
+  if EQLong = false
+  then
+  begin
+    if length(A.Long[A.countElem]) > length(B.Long[B.countElem])
+    then
+    begin
+      LessLong := true;
+      LessInput := 1
+    end
+    else
+      if length(A.Long[A.countElem]) < length(B.Long[B.countElem])
+      then
+      begin
+        LessLong := false;
+        LessInput := 2
+      end
+      else
+      begin
+        if (LessInput <> 1) and (LessInput <> 2)
+        then
+          for i := A.countElem downto 1 do
+          begin
+            if (LessInput <> 1) and (LessInput <> 2)
+            then
+              for j := 1 to 3 do
+              begin
+                if (LessInput <> 1) and (LessInput <> 2)
+                then
+                  if CharInt(A.Long[i][j]) > CharInt(B.Long[i][j])
+                  then
+                  begin
+                    LessLong := true;
+                    LessInput := 1
+                  end
+                  else
+                    if CharInt(A.Long[i][j]) < CharInt(B.Long[i][j])
+                    then
+                    begin
+                      LessLong := false;
+                      LessInput := 2
+                    end;
+              end;
+          end;
+      end
+  end;
+end;
 
+{
 procedure subTlong(A:Tlong;B:Tlong;var subMass:Tlong);
 var
 begin
-
+  
 end;
 }
 
 var
   f1:text;
   i, numbChisla:integer;
-  firstMass, secondMass, addMass :Tlong;
-  error:boolean;
+  firstMass, secondMass, addMass, subMass :Tlong;
+  error, big1 :boolean;
 begin
   assign(f1, 'chisla.txt');
   reset(f1);
   ReadTLong(f1, firstMass, error);
   ReadTLong(f1, secondMass, error);
   addTLong (firstMass, secondMass, addMass);
-  writeTlong(firstMass);
-  writeTlong(secondMass);
-  writeTlong(addMass);
+  write('Первое число = "');    
+  PrintTlong(firstMass);
+  write('Второе число = "');
+  PrintTlong(secondMass);
+  write('Сумма двух чисел = "');
+  PrintTlong(addMass);
+  PrintTlong(subMass);
+  
+  big1 := EQLong(firstMass, secondMass);
+  if big1 = true
+  then
+    writeln('Два числа равны EQLong')
+  else
+    if (LessLong(firstMass, secondMass, big1) = true)
+    then
+      writeln('Первое число больше LessLong')
+    else
+      writeln('Второе число больше LessLong');
+  
 end.
