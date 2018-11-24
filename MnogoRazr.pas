@@ -256,21 +256,21 @@ begin
   if EQLong = false
   then
   begin
-    if length(A.Long[A.countElem]) > length(B.Long[B.countElem])
+    if A.countElem > B.countElem
     then
     begin
       LessLong := true;
       LessInput := 1
     end
     else
-      if length(A.Long[A.countElem]) < length(B.Long[B.countElem])
+    begin
+      if A.countElem < B.countElem
       then
       begin
         LessLong := false;
         LessInput := 2
       end
       else
-      begin
         if (LessInput <> 1) and (LessInput <> 2)
         then
           for i := A.countElem downto 1 do
@@ -300,13 +300,114 @@ begin
   end;
 end;
 
-{
-procedure subTlong(A:Tlong;B:Tlong;var subMass:Tlong);
-var
+
+
+procedure subTlong(A, B:Tlong;var subMass:Tlong);
+var i, j, timesDoSub, bigNumb, ostatok :integer;
+    s : string;
 begin
-  
+  subMass.countElem := 0;
+  if A.countElem >= B.countElem 
+  then
+  begin
+    timesDoSub := B.countElem;
+    bigNumb := A.countElem;
+  end
+  else
+  begin
+    timesDoSub := A.countElem;
+    bigNumb := B.countElem;
+  end;
+  for i := 1 to timesDoSub do
+  begin
+    if (LessLong(A,B,EQLong(A, B)) = true)// Если TRUE то число А больше чем B. EQLong - Если числа равны между собой то TRUE
+    then
+    begin
+      for j:= 3 downto 1 do
+      begin
+        if (CharInt(A.Long[i][j]) + ostatok) >= CharInt(B.Long[i][j])
+        then
+        begin
+          s := IntChar(CharInt(A.Long[i][j]) - CharInt(B.Long[i][j]) + ostatok) + s;
+          ostatok := 0;
+        end
+        else
+        begin
+          s := IntChar(CharInt(A.Long[i][j]) + 16 + ostatok - CharInt(B.Long[i][j])) + s;
+          ostatok := -1;
+        end;
+      end;
+      inc(subMass.countElem);
+      subMass.Long[i] := s;
+      s := '';
+    end
+    else
+    begin
+      for j:= 3 downto 1 do
+      begin
+        if (CharInt(B.Long[i][j]) + ostatok) >= CharInt(A.Long[i][j])
+        then
+        begin
+          s := IntChar(CharInt(B.Long[i][j]) - CharInt(A.Long[i][j]) + ostatok) + s;
+          ostatok := 0;
+        end
+        else
+        begin
+          s := IntChar(CharInt(B.Long[i][j]) + 16 + ostatok - CharInt(A.Long[i][j])) + s;
+          ostatok := -1;
+        end;
+      end;
+      inc(subMass.countElem);
+      subMass.Long[i] := s;
+      s := '';
+    end;
+  end;
+  for i := timesDoSub + 1 to bigNumb do
+  begin
+    if (LessLong(A,B,EQLong(A, B)) = true)// Если TRUE то число А больше чем B. EQLong - Если числа равны между собой то TRUE
+    then
+    begin
+      for j:= 3 downto 1 do
+      begin
+        if (CharInt(A.Long[i][j]) + ostatok) >= CharInt('0')
+        then
+        begin
+          s := IntChar(CharInt(A.Long[i][j]) - CharInt('0') + ostatok) + s;
+          ostatok := 0;
+        end
+        else
+        begin
+          s := IntChar(CharInt(A.Long[i][j]) + 16 + ostatok - CharInt('0')) + s;
+          ostatok := -1;
+        end;
+      end;
+      inc(subMass.countElem);
+      subMass.Long[i] := s;
+      s := '';
+    end
+    else
+    begin
+      for j:= 3 downto 1 do
+      begin
+        if (CharInt(B.Long[i][j]) + ostatok) >= CharInt('0')
+        then
+        begin
+          s := IntChar(CharInt(B.Long[i][j]) - CharInt('0') + ostatok) + s;
+          ostatok := 0;
+        end
+        else
+        begin
+          s := IntChar(CharInt(B.Long[i][j]) + 16 + ostatok - CharInt('0')) + s;
+          ostatok := -1;
+        end;
+      end;
+      inc(subMass.countElem);
+      subMass.Long[i] := s;
+      s := '';
+    end;
+  end;
 end;
-}
+
 
 var
   f1:text;
@@ -319,13 +420,21 @@ begin
   ReadTLong(f1, firstMass, error);
   ReadTLong(f1, secondMass, error);
   addTLong (firstMass, secondMass, addMass);
+  subTLong (firstMass, secondMass, subMass);
   write('Первое число = "');    
   PrintTlong(firstMass);
   write('Второе число = "');
   PrintTlong(secondMass);
   write('Сумма двух чисел = "');
   PrintTlong(addMass);
-  PrintTlong(subMass);
+  
+    if (LessLong(firstMass, secondMass, big1) = true)
+    then
+    write('Разность двух чисел = "')
+    else
+    write('Разность двух чисел = "-');
+    PrintTlong(subMass);
+  
   
   big1 := EQLong(firstMass, secondMass);
   if big1 = true
@@ -337,5 +446,6 @@ begin
       writeln('Первое число больше LessLong')
     else
       writeln('Второе число больше LessLong');
-  
+      
+      
 end.
