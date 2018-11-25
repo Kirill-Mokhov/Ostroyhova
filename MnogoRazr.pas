@@ -93,6 +93,12 @@ begin
   for i := A.countElem downto 1 do
   begin
     deliteZiro(A.Long[i],checkZiro);
+    if (i = 1) and (checkZiro = true)
+    then
+      A.Long[i] := '0';
+    if A.Long[i] = ''
+    then
+      dec(A.countElem);
     write(A.Long[i]);
   end;
   write('". Число элементов в массиве "', A.countElem,'". ');
@@ -302,7 +308,7 @@ end;
 
 
 
-procedure subTlong(A, B:Tlong;var subMass:Tlong);
+procedure subTlong(A, B : Tlong;var subMass : Tlong);
 var i, j, timesDoSub, bigNumb, ostatok :integer;
     s : string;
 begin
@@ -428,11 +434,15 @@ begin
   write('Сумма двух чисел = "');
   PrintTlong(addMass);
   
-    if (LessLong(firstMass, secondMass, big1) = true)
+    if (LessLong(firstMass, secondMass, EQLong(firstMass, secondMass)) = true)
     then
-    write('Разность двух чисел = "')
+      write('Разность двух чисел = "')
     else
-    write('Разность двух чисел = "-');
+      if EQLong(firstMass, secondMass) = true
+      then
+        write('Разность двух чисел = "')
+      else
+        write('Разность двух чисел = "-');
     PrintTlong(subMass);
   
   
@@ -441,11 +451,14 @@ begin
   then
     writeln('Два числа равны EQLong')
   else
+  begin
+    writeln('Два числа не равны EQLong');
     if (LessLong(firstMass, secondMass, big1) = true)
     then
       writeln('Первое число больше LessLong')
     else
       writeln('Второе число больше LessLong');
+   end;
       
       
 end.
