@@ -9,7 +9,7 @@ var i, numbNoZiro : integer;
 begin
   for i := 1 to length(s) do
   begin
-    if (s[i] = '0') and (checkZiro = true)
+    if (s[i] = '0') and (checkZiro = true) and ( i <> length(s))
     then
       numbNoZiro := i
     else
@@ -22,7 +22,7 @@ end;
 procedure ReadTLong(f1:text; var A:Tlong; var error:boolean);
 var
   s, s1:string;
-  i, EndLine, count, numbNoZiro:integer;
+  i, EndLine, count:integer;
   checkZiro : boolean;  
 begin
 //..............................................................................Проверка на максимальное количество символов
@@ -84,9 +84,8 @@ begin
 end;
 
 //..............................................................................Печать числа
-procedure PrintTlong(A:Tlong);
-var i, j : integer;
-    s : string;
+procedure PrintTlong(f2:text; A:Tlong);
+var i : integer;
     checkZiro : boolean;
 begin
   checkZiro := true;
@@ -99,10 +98,10 @@ begin
     if A.Long[i] = ''
     then
       dec(A.countElem);
-    write(A.Long[i]);
+    write(f2, A.Long[i]);
   end;
-  write('". Число элементов в массиве "', A.countElem,'". ');
-  writeln;
+  write(f2, '');
+  writeln(f2, '');
 end;
 
 //..............................................................................Перевод из char в integer
@@ -183,7 +182,7 @@ end;
 {||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||}
 procedure addTLong(firstMass:Tlong; secondMass:Tlong; var addMass:Tlong);
 var
-  ostatokElem, countAdd , elementFirstMass, elementSecondMass, i, countWhile: integer;
+  ostatokElem, i: integer;
   secondMassMore, equallyMass : boolean;
   sumElem : string;
 begin
@@ -416,49 +415,26 @@ end;
 
 
 var
-  f1:text;
-  i, numbChisla:integer;
+  f1, f2 :text;
   firstMass, secondMass, addMass, subMass :Tlong;
-  error, big1 :boolean;
+  error1, error2, big1 :boolean;
 begin
   assign(f1, 'chisla.txt');
   reset(f1);
-  ReadTLong(f1, firstMass, error);
-  ReadTLong(f1, secondMass, error);
-  addTLong (firstMass, secondMass, addMass);
-  subTLong (firstMass, secondMass, subMass);
-  write('Первое число = "');    
-  PrintTlong(firstMass);
-  write('Второе число = "');
-  PrintTlong(secondMass);
-  write('Сумма двух чисел = "');
-  PrintTlong(addMass);
-  
-    if (LessLong(firstMass, secondMass, EQLong(firstMass, secondMass)) = true)
-    then
-      write('Разность двух чисел = "')
-    else
-      if EQLong(firstMass, secondMass) = true
-      then
-        write('Разность двух чисел = "')
-      else
-        write('Разность двух чисел = "-');
-    PrintTlong(subMass);
-  
-  
-  big1 := EQLong(firstMass, secondMass);
-  if big1 = true
+  assign(f2, 'result.txt');
+  rewrite(f2);
+  ReadTLong(f1, firstMass, error1);
+  ReadTLong(f1, secondMass, error2);
+  if (error1 = false) and (error2 = false)
   then
-    writeln('Два числа равны EQLong')
-  else
   begin
-    writeln('Два числа не равны EQLong');
-    if (LessLong(firstMass, secondMass, big1) = true)
-    then
-      writeln('Первое число больше LessLong')
-    else
-      writeln('Второе число больше LessLong');
-   end;
-      
-      
+    addTLong (firstMass, secondMass, addMass);
+    subTLong (firstMass, secondMass, subMass);    
+    PrintTlong(f2,firstMass);
+    PrintTlong(f2,secondMass);
+    PrintTlong(f2,addMass);
+    PrintTlong(f2,subMass);
+    close(f1);
+    close(f2);
+  end;
 end.
