@@ -81,10 +81,9 @@ void porazriadniaiaSearch(int *A, int n) { //Поразрядная сортир
             matrixSearch[i][j] = 0;
         }
     }
-
+    int cmp(0);
 
     for (int k = 1; k <= maxRazriadCisla; k++) {
-        cout <<"k = " << k << endl;
 
         for (size_t j = 0; j < n; j++) {
             bool write = false;
@@ -98,58 +97,72 @@ void porazriadniaiaSearch(int *A, int n) { //Поразрядная сортир
                     }
                     if (dontWrite == false) {
                         matrixSearch[razriadChisla(A[j], k)][q] = A[j];
-                        cout << matrixSearch[razriadChisla(A[j], k)][q] << " ";
                         write = true;
+                        cmp++;
                     }
                 }
             }
-            cout << endl;
         }
-
+        ///**
+        cout << "Peregrypirovka " << k << " SHaga :" << endl;
         for (size_t i = 0; i < 10; i++) {
             for (size_t j = 0; j < n; j++) {
                 cout << matrixSearch[i][j] << " ";
             }
             cout << endl;
         }
-
+        cout << endl;
+        //**/
+        int numb(0);
         for (size_t i = 0; i < 10; i++) {
             for (size_t j = 0; j < n; j++) {
                 bool write = false;
+
+                if(matrixSearch[i][j] != 0){
+                    A[numb] = matrixSearch[i][j];
+                    numb++;
+                    cmp++;
+                }
                 if ((howRazr(matrixSearch[i][j]) == k) && (matrixSearch[i][j] != 0)) {
                     for (size_t k = 0; k < n; k++) {
                         if ((write == false) && (matrixSearch[0][k] == 0)) {
                             matrixSearch[0][k] = matrixSearch[i][j];
                             matrixSearch[i][j] = 0;
-                            cout << matrixSearch[0][k] << " ";
                             write = true;
                         }
                     }
                 }
             }
-            cout << endl;
         }
+        cout << "Massiv posle " << "k" << " shaga."  << endl;
+        for (size_t i = 0; i < n; i++)
+            cout << A[i] << " ";
+        cout << endl << "****************" << endl;
+
+
+        ///**
+        cout << "Sborka " << k << " SHaga :" << endl;
         for (size_t i = 0; i < 10; i++) {
             for (size_t j = 0; j < n; j++) {
                 cout << matrixSearch[i][j] << " ";
             }
             cout << endl;
         }
+        cout << endl;
+         //**/
 
-        for (size_t i = 1; i < 10; i++){
+        for (size_t i = 0; i < 10; i++){
             for (size_t j = 0; j < n; j++){
                 matrixSearch[i][j] = 0;
             }
         }
-
     }
-
-    for (size_t i = 0; i < n; i++)
-        A[i] = matrixSearch[0][i];
 
     cout << "Rezyltat porazriadnoi search: " << endl;
     for (size_t i = 0; i < n; i++)
         cout << A[i] << " ";
+    cout << endl;
+    cout << "cmp = " << cmp << endl;
 }
 
 
@@ -167,22 +180,22 @@ int main(){
     for (i=0; i<n; i++)
         cout << vectorSearchShella[i] << " ";
     cout << endl <<"Rezyltat " << endl;
-
-    cout << endl <<"Search Shella: " << endl;
     int *vectorSearchForPoraz = new int[n];
     for (i=0; i<n; i++)
         vectorSearchForPoraz[i] = vectorSearchShella[i];
-    double t1, t2, t_shell;
+    double t1, t2, t3, t4, t_shell, t_poraz;
 
+    cout << endl <<"Search Shella: " << endl;
     t1 = (double)GetTickCount();
-    t2 = (double)GetTickCount();
     Shell(vectorSearchShella, n);
+    t2 = (double)GetTickCount();
     t_shell = t2 - t1;
     cout << "Time Shell sort: " << t_shell << endl;
 
     cout << endl <<"Search Porazriadnaiaia: " << endl;
-
+    t3 = (double)GetTickCount();
     porazriadniaiaSearch(vectorSearchForPoraz, n);
-
-    system("pause >> void");
+    t4 = (double)GetTickCount();
+    t_poraz = t4 - t3;
+    cout << "Time Porazriadnaia sort: " << t_poraz << endl;
 }
