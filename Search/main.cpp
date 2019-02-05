@@ -88,11 +88,19 @@ void porazriadniaiaSearch(int *A, int n) { //Поразрядная сортир
 
         for (size_t j = 0; j < n; j++) {
             bool write = false;
+            bool dontWrite = false;
             for (size_t q = 0; q < n; q++) {
                 if ((write == false) && (matrixSearch[razriadChisla(A[j], k)][q] == 0)) {
-                    matrixSearch[razriadChisla(A[j], k)][q] = A[j];
-                    cout << matrixSearch[razriadChisla(A[j], k)][q] << " ";
-                    write = true;
+                    for (size_t i = 0; i < n; i++) {
+                        if (matrixSearch[0][i] == A[j]){
+                            dontWrite = true;
+                        }
+                    }
+                    if (dontWrite == false) {
+                        matrixSearch[razriadChisla(A[j], k)][q] = A[j];
+                        cout << matrixSearch[razriadChisla(A[j], k)][q] << " ";
+                        write = true;
+                    }
                 }
             }
             cout << endl;
@@ -135,14 +143,13 @@ void porazriadniaiaSearch(int *A, int n) { //Поразрядная сортир
         }
 
     }
+
     for (size_t i = 0; i < n; i++)
         A[i] = matrixSearch[0][i];
 
     cout << "Rezyltat porazriadnoi search: " << endl;
     for (size_t i = 0; i < n; i++)
         cout << A[i] << " ";
-
-
 }
 
 
