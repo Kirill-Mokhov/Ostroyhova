@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int i, j, n, count, RandVector;
+int i, j, n, count, RandVector, errO(0);
 
 void Shell_sort(int *A, int n) { //сортировка Шелла
     size_t swap = 0;
@@ -78,7 +78,6 @@ int razmer(){
 
 void Radix_sort(int *A, int n) { //Поразрядная сортировка
 /**Удаление нулей из вектора, чтобы работала поразрядная сортировка**/
-    int errO(0);
     for (size_t i = 0; i < n; i++){
         if (A[i] == 0){
             errO++;
@@ -198,10 +197,6 @@ void Radix_sort(int *A, int n) { //Поразрядная сортировка
             }
         }
     }
-
-    cout << "Radix sorting result: ";
-    for (size_t i = 0; i < errO; i++)
-        cout << "0 ";
     cout << "Number of swaps: \"" << swap << "\"" << endl;
 }
 
@@ -268,6 +263,9 @@ int main(){
             Radix_sort(vectorSearchForRadix, n);
             time4 = clock() / 1000.0;
             t_radix = time4 - time3;
+            cout << "Radix sorting result: ";
+            for (size_t i = 0; i < errO; i++)
+                cout << "0 ";
             for (size_t i = 0; i < n; i++)
                 cout << vectorSearchForRadix[i] << " ";
             cout << endl;
