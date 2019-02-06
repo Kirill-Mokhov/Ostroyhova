@@ -51,9 +51,11 @@ int howRazr(int A) {
 }
 
 int razriadChisla(int A , int numbDel) {
-    int cislo;
+    int cislo ,delTEN(10);
     cislo = A;
-    cislo = cislo % (int)pow(10,numbDel);
+    for (size_t i = 1; i < numbDel; i++)
+        delTEN *= 10;
+    cislo = cislo % delTEN;
     if (cislo > 9) {
         while (cislo > 9) {
             cislo /= 10;
@@ -61,6 +63,7 @@ int razriadChisla(int A , int numbDel) {
     }
     return cislo;
 }
+
 
 int razmer(){
     int razmernost(0);
