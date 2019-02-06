@@ -74,20 +74,18 @@ int razmer(){
     return razmernost;
 }
 
-
-
-void Radix_sort(int *A, int n) { //Поразрядная сортировка
+void delZiro(int *A, int n) {
 /**Удаление нулей из вектора, чтобы работала поразрядная сортировка**/
-    for (size_t i = 0; i < n; i++){
-        if (A[i] == 0){
+    for (size_t i = 0; i < n; i++) {
+        if (A[i] == 0) {
             errO++;
         }
     }
-    if (errO > 0){
-        int A1[n-errO];
+    if (errO > 0) {
+        int A1[n - errO];
         size_t j(0);
-        for (size_t i = 0; i < n; i++){
-            if (A[i] != 0){
+        for (size_t i = 0; i < n; i++) {
+            if (A[i] != 0) {
                 A1[j] = A[i];
                 j++;
             }
@@ -96,6 +94,11 @@ void Radix_sort(int *A, int n) { //Поразрядная сортировка
         for (size_t i = 0; i < n; i++)
             A[i] = A1[i];
     }
+}
+
+
+
+void Radix_sort(int *A, int n) { //Поразрядная сортировка
 
     int **matrixSort = new int *[10];
     for (size_t i = 0; i < 10; i++)
@@ -215,7 +218,7 @@ int main(){
     }
     if (RandVector == 2){
         for(size_t i = 0; i < n; i++)
-            vectorSearchShella[i] = rand() % 100000 + 1;
+            vectorSearchShella[i] = rand() % 100 + 1;
     }
 
     if (n != 0) {
@@ -242,15 +245,16 @@ int main(){
             for (i = 0; i < n; i++)
                 cout << vectorSearchShella[i] << " ";
             cout << endl;
-            time1 = clock() / 1000.0;
+            time1 = clock() / 10000.0;
             Shell_sort(vectorSearchShella, n);
-            time2 = clock() / 1000.0;
+            time2 = clock() / 10000.0;
             t_shell = time2 - time1;
             cout << "Shell sorting result: ";
             for (i = 0; i < n; i++)
                 cout << vectorSearchShella[i] << " ";
             cout << endl;
-            cout << "Time Shell sort: " << t_shell << endl;
+            printf("Time Shell sort: = %.4f",t_shell);
+            cout << endl;
             cout << "************************************************************" << endl;
 
 
@@ -259,6 +263,7 @@ int main(){
             for (size_t i = 0; i < n; i++)
                 cout << vectorSearchForRadix[i] << " ";
             cout << endl;
+            delZiro(vectorSearchForRadix, n);
             time3 = clock() / 1000.0;
             Radix_sort(vectorSearchForRadix, n);
             time4 = clock() / 1000.0;
@@ -269,7 +274,8 @@ int main(){
             for (size_t i = 0; i < n; i++)
                 cout << vectorSearchForRadix[i] << " ";
             cout << endl;
-            cout << "Time Radix sort: " << t_radix << endl;
+            printf("Time Radix sort: = %.4f",t_radix);
+            cout << endl;
             cout << "************************************************************" << endl;
         } else {
             for (size_t i = 0; i < n - 1; i++) {
