@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int i, j, n, count;
+int i, j, n, count, RandVector;
 
 void Shell_sort(int *A, int n) { //сортировка Шелла
     cout << "Not sorted vector: ";
@@ -62,20 +62,28 @@ int razriadChisla(int A , int numbDel) {
     return cislo;
 }
 
+int razmer(){
+    int razmernost(0);
+    cout << "To create a vector with your elements values\"1\" and press \"Enter\"." << endl;
+    cout << "To create a vector with random elements values\"2\" and press \"Enter\"." << endl;
+    cin >> RandVector;
+    cout << endl;
+    if (RandVector == 1){
+        cout << "Enter vector size: ";
+        cin >> razmernost;
+    }
+    if (RandVector >= 2){
+        cout << "Enter the size of the random vector: ";
+        cin >> razmernost;
+    }
+    return razmernost;
+}
+
 
 
 void Radix_sort(int *A, int n) { //Поразрядная сортировка
 
-    int **matrixSort = new int *[10];
-    for (size_t i = 0; i < 10; i++)
-        matrixSort[i] = new int[n];
-
-    cout << "Not sorted vector: ";
-    for (size_t i = 0; i < n; i++)
-        cout << A[i] << " ";
-    cout << endl;
-
-    /**Удаление нулей из вектора, чтобы работала поразрядная сортировка**/
+/**Удаление нулей из вектора, чтобы работала поразрядная сортировка**/
     int errO(0);
     for (size_t i = 0; i < n; i++){
         if (A[i] == 0){
@@ -95,6 +103,15 @@ void Radix_sort(int *A, int n) { //Поразрядная сортировка
         for (size_t i = 0; i < n; i++)
             A[i] = A1[i];
     }
+
+    int **matrixSort = new int *[10];
+    for (size_t i = 0; i < 10; i++)
+        matrixSort[i] = new int[n];
+
+    cout << "Not sorted vector: ";
+    for (size_t i = 0; i < n; i++)
+        cout << A[i] << " ";
+    cout << endl;
 
     int maxRazriadCisla(0);
     for (size_t i = 0; i < n; i++) {
@@ -207,26 +224,18 @@ void Radix_sort(int *A, int n) { //Поразрядная сортировка
 
 
 int main(){
-    size_t RandVector(0);
-    cout << "To create a vector with random values\"1\" and press \"Enter\"." << endl;
-    cout << "To create a vector with your elements values\"2\" and press \"Enter\"." << endl;
-    cin >> RandVector;
+    n = razmer();
     int *vectorSearchShella = new int[n];
     int *vectorSearchForRadix = new int[n];
     if (RandVector == 1){
-        cout << "Enter the size of the random vector: ";
-        cin >> n;
-        for(size_t i = 0; i < n; i++)
-            vectorSearchShella[i] = rand() % 10000 + 1;
-    }
-    if (RandVector == 2){
-        cout << "Enter vector size: ";
-        cin >> n;
-
         for (i = 0; i < n; i++) {
             cout << "Enter the " << i + 1 << " element of the array: ";
             cin >> vectorSearchShella[i];
         }
+    }
+    if (RandVector == 2){
+        for(size_t i = 0; i < n; i++)
+            vectorSearchShella[i] = rand() % 10000 + 1;
     }
 
     if (n != 0) {
