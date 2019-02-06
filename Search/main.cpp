@@ -204,59 +204,60 @@ void Radix_sort(int *A, int n) { //Поразрядная сортировка
 int main(){
     cout << "Enter array size: ";
     cin >> n;
-
-    int *vectorSearchShella = new int[n];
-    for (i=0; i<n; i++){
-        cout << "Enter the " << i + 1 << " element of the array:";
-        cin >> vectorSearchShella[i];
-    }
-
-    cout << "The resulting vector:" << endl;
-    for (i=0; i<n; i++)
-        cout << vectorSearchShella[i] << " ";
-
-    int *vectorSearchForRadix = new int[n];
-    for (i=0; i<n; i++)
-        vectorSearchForRadix[i] = vectorSearchShella[i];
-
-    double t1, t2, t3, t4, t_shell, t_radix;
-    bool trueVectorSort = true, equalVectorSort = true ;
-
-    for(size_t i = 0; i < n - 1; i++){
-        if(vectorSearchShella[i] > vectorSearchShella[i+1]){
-            trueVectorSort = false;
+    if (n != 0) {
+        int *vectorSearchShella = new int[n];
+        for (i = 0; i < n; i++) {
+            cout << "Enter the " << i + 1 << " element of the array:";
+            cin >> vectorSearchShella[i];
         }
-    }
 
-    if (trueVectorSort == false){
-        cout << endl << "****************************************************" << "Shell sort: " << endl;
-        t1 = (double) GetTickCount();
-        Shell_sort(vectorSearchShella, n);
-        t2 = (double) GetTickCount();
-        t_shell = t2 - t1;
-        cout << "Time Shell sort: " << t_shell << endl;
-        cout << "****************************************************" << endl;
+        cout << "The resulting vector:" << endl;
+        for (i = 0; i < n; i++)
+            cout << vectorSearchShella[i] << " ";
 
+        int *vectorSearchForRadix = new int[n];
+        for (i = 0; i < n; i++)
+            vectorSearchForRadix[i] = vectorSearchShella[i];
 
-        cout << endl << "****************************************************" << "Radix sort: " << endl;
-        t3 = (double) GetTickCount();
-        Radix_sort(vectorSearchForRadix, n);
-        t4 = (double) GetTickCount();
-        t_radix = t4 - t3;
-        cout << "Time Radix sort: " << t_radix << endl;
-        cout << "****************************************************" << endl;
-    }
-    else{
-        for(size_t i = 0; i < n - 1; i++){
-            if (vectorSearchShella[i] < vectorSearchShella[i+1]){
-                equalVectorSort = false;
+        double t1, t2, t3, t4, t_shell, t_radix;
+        bool trueVectorSort = true, equalVectorSort = true;
+
+        for (size_t i = 0; i < n - 1; i++) {
+            if (vectorSearchShella[i] > vectorSearchShella[i + 1]) {
+                trueVectorSort = false;
             }
         }
-        if (equalVectorSort == true){
-            cout << endl << "Notice: All elements of the vector are equal!" << endl;
+
+        if (trueVectorSort == false) {
+            cout << endl << "****************************************************" << "Shell sort: " << endl;
+            t1 = (double) GetTickCount();
+            Shell_sort(vectorSearchShella, n);
+            t2 = (double) GetTickCount();
+            t_shell = t2 - t1;
+            cout << "Time Shell sort: " << t_shell << endl;
+            cout << "****************************************************" << endl;
+
+
+            cout << endl << "****************************************************" << "Radix sort: " << endl;
+            t3 = (double) GetTickCount();
+            Radix_sort(vectorSearchForRadix, n);
+            t4 = (double) GetTickCount();
+            t_radix = t4 - t3;
+            cout << "Time Radix sort: " << t_radix << endl;
+            cout << "****************************************************" << endl;
+        } else {
+            for (size_t i = 0; i < n - 1; i++) {
+                if (vectorSearchShella[i] < vectorSearchShella[i + 1]) {
+                    equalVectorSort = false;
+                }
+            }
+            if (equalVectorSort == true) {
+                cout << endl << "Notice: All elements of the vector are equal!" << endl;
+            } else {
+                cout << endl << "Notice: Vector already sorted!" << endl;
+            }
         }
-        else{
-            cout << endl << "Notice: Vector already sorted!" << endl;
-        }
+    }else{
+        cout << "Error: Your vector is ZERO!";
     }
 }
