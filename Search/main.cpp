@@ -9,6 +9,10 @@ using namespace std;
 int i, j, n, count;
 
 void Shell_sort(int *A, int n) { //сортировка Шелла
+    cout << "Not sorted vector: ";
+    for (i = 0; i < n; i++)
+        cout << A[i] << " ";
+    cout << endl;
     size_t swap = 0;
     size_t cmp = 0 ;
     int graniza = n / 2;
@@ -28,11 +32,12 @@ void Shell_sort(int *A, int n) { //сортировка Шелла
         }
         graniza = graniza / 2;
     }
+    cout << "Shell sorting result: ";
     for (i = 0; i < n; i++)
         cout << A[i] << " ";
     cout << endl;
-    cout << "Kolvo swapow : \"" << swap << "\"" << endl;
-    cout << "Kolichestvo sravnenii : \"" << cmp << "\"" << endl;
+    cout << "Number of swaps: \"" << swap << "\"" << endl;
+    cout << "Number of comparisons: \"" << cmp << "\"" << endl;
 }
 
 int howRazr(int A) {
@@ -96,7 +101,7 @@ void Radix_sort(int *A, int n) { //Поразрядная сортировка
         if (howRazr(A[i]) > maxRazriadCisla)
             maxRazriadCisla = howRazr(A[i]);
     }
-    cout << "Maximum number of digits in numbers : " << maxRazriadCisla << endl;
+    cout << "Maximum number of digits in numbers: " << maxRazriadCisla << endl;
 
     for (size_t i = 0; i < 10; i++) {
         for (size_t j = 0; j < n; j++) {
@@ -109,7 +114,6 @@ void Radix_sort(int *A, int n) { //Поразрядная сортировка
 
         for (size_t j = 0; j < n; j++) {
             bool write = false;
-            bool dontWrite = false;
             if (howRazr(A[j])>= k) {
                 for (size_t q = 0; q < n; q++) {
                     if ((write == false) && (matrixSort[razriadChisla(A[j], k)][q] == 0)) {
@@ -125,11 +129,11 @@ void Radix_sort(int *A, int n) { //Поразрядная сортировка
                     if ((write == false) && (matrixSort[0][q] == 0)){
                         matrixSort[0][q] = A[j];
                         write = true;
+                        cmp++;
                     }
                 }
             }
         }
-
 
         /**
         cout << "Rearrangement of elements " << k << " steps :" << endl;
@@ -141,6 +145,7 @@ void Radix_sort(int *A, int n) { //Поразрядная сортировка
         }
         cout << endl;
         **/
+
         int numb(0);
         for (size_t i = 0; i < 10; i++) {
             for (size_t j = 0; j < n; j++) {
@@ -189,37 +194,51 @@ void Radix_sort(int *A, int n) { //Поразрядная сортировка
         }
     }
 
-    cout << "Radix sorting result :" << endl;
+    cout << "Radix sorting result: ";
     for (size_t i = 0; i < errO; i++)
         cout << "0 ";
     for (size_t i = 0; i < n; i++)
         cout << A[i] << " ";
     cout << endl;
-    cout << "cmp = " << cmp << endl;
+    cout << "Perestanovok = " << cmp << endl;
 }
 
 
 
 
 int main(){
-    cout << "Enter array size: ";
-    cin >> n;
-    if (n != 0) {
-        int *vectorSearchShella = new int[n];
+    size_t RandVector(0);
+    cout << "To create a vector with random values\"1\" and press \"Enter\"." << endl;
+    cout << "To create a vector with your elements values\"2\" and press \"Enter\"." << endl;
+    cin >> RandVector;
+    int *vectorSearchShella = new int[n];
+    int *vectorSearchForRadix = new int[n];
+    if (RandVector == 1){
+        cout << "Enter the size of the random vector: ";
+        cin >> n;
+        for(size_t i = 0; i < n; i++)
+            vectorSearchShella[i] = rand() % 10000 + 1;
+    }
+    if (RandVector == 2){
+        cout << "Enter vector size: ";
+        cin >> n;
+
         for (i = 0; i < n; i++) {
-            cout << "Enter the " << i + 1 << " element of the array:";
+            cout << "Enter the " << i + 1 << " element of the array: ";
             cin >> vectorSearchShella[i];
         }
+    }
 
-        cout << "The resulting vector:" << endl;
+    if (n != 0) {
+        cout << "The resulting vector: " << endl;
         for (i = 0; i < n; i++)
             cout << vectorSearchShella[i] << " ";
 
-        int *vectorSearchForRadix = new int[n];
+        //int *vectorSearchForRadix = new int[n];
         for (i = 0; i < n; i++)
             vectorSearchForRadix[i] = vectorSearchShella[i];
 
-        double t1, t2, t3, t4, t_shell, t_radix;
+        double time1, time2, time3, time4, t_shell, t_radix;
         bool trueVectorSort = true, equalVectorSort = true;
 
         for (size_t i = 0; i < n - 1; i++) {
@@ -229,22 +248,22 @@ int main(){
         }
 
         if (trueVectorSort == false) {
-            cout << endl << "****************************************************" << "Shell sort: " << endl;
-            t1 = (double) GetTickCount();
+            cout << endl << "*************************Shell sort*************************" <<  endl;
+            time1 = clock() / 1000.0;
             Shell_sort(vectorSearchShella, n);
-            t2 = (double) GetTickCount();
-            t_shell = t2 - t1;
+            time2 = clock() / 1000.0;
+            t_shell = time2 - time1;
             cout << "Time Shell sort: " << t_shell << endl;
-            cout << "****************************************************" << endl;
+            cout << "************************************************************" << endl;
 
 
-            cout << endl << "****************************************************" << "Radix sort: " << endl;
-            t3 = (double) GetTickCount();
+            cout << endl << "*************************Radix sort*************************" << endl;
+            time3 = clock() / 1000.0;
             Radix_sort(vectorSearchForRadix, n);
-            t4 = (double) GetTickCount();
-            t_radix = t4 - t3;
+            time4 = clock() / 1000.0;
+            t_radix = time4 - time3;
             cout << "Time Radix sort: " << t_radix << endl;
-            cout << "****************************************************" << endl;
+            cout << "************************************************************" << endl;
         } else {
             for (size_t i = 0; i < n - 1; i++) {
                 if (vectorSearchShella[i] < vectorSearchShella[i + 1]) {
