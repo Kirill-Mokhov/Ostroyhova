@@ -36,21 +36,18 @@ public:
 	}
 
 	int hashFunction1(unsigned int key) {
-	    int address = 0, a = 0, b = 0;
-	    a = key / 1000;
-		for(size_t i = 0; i <= 3; i++){
-		    key = key % 10;
-		}
-		b = key;
-		address = (a + b) / 2;
-		return address;
+        int address = 0;
+        while (key != 0) {
+            address = address + (key % 10);
+            key = key / 10;
+        }
+        address = address % size;
+        return address;
 	}
 
 	int hashFunction2(int LastHash) {
 		int address = LastHash;
-		address += 1;
-		if (address >= size)
-		    address -= size;
+		address = (address + 1) % size;
 		return address;
 	}
 
@@ -125,10 +122,11 @@ public:
 		else {
 			while (count <= countOfElem) {
 				address = hashFunction2(address);
-				count++;
 				if ((table[address].fullName == record.fullName) && (table[address].key == record.key) && (status[address] == 1)) {
 					return address;
 				}
+				if (status[address] == 1)
+                    count++;
 			}
 			return ERROR_RECORD_NOT_FOUND;
 		}
@@ -140,67 +138,129 @@ public:
 		    cout << "Неудалось удалить. Данная запись не найдена : \"" << record.key << " | " << record.fullName << "\"" << endl;
 			return ERROR_RECORD_NOT_FOUND;
 		}
+		table[address].key = 0;
+        table[address].fullName = "";
 		status[address] = 0;
 		countOfElem--;
+		rehashTable();
         return 0;
 	}
+
+	void rehashTable(){
+	    Record record;
+	    size_t count = 0;
+        while(count <= size){
+            if(status[count] == 1){
+                record.key = table[count].key;
+                record.fullName = table[count].fullName;
+                table[count].key = 0;
+                table[count].fullName = "";
+                status[count] = 0;
+                countOfElem--;
+                add(record);
+            }
+            count++;
+        }
+    }
 };
 
+
+
 int main(){
-	HashTable table(10);
+	HashTable table(30);
 	Record record;
-	record.key = 1000;
-	record.fullName = "Kirill Mokhovichenko1";
-    table.add(record);
-    record.key = 1010;
-    record.fullName = "Kirill Mokhovichenko2";
-    table.add(record);
-    record.key = 1020;
-    record.fullName = "Kirill Mokhovichenko3";
-    table.add(record);
-    record.key = 1030;
-    record.fullName = "Kirill Mokhovichenko4";
-    table.add(record);
-    record.key = 1040;
-    record.fullName = "Kirill Mokhovichenko5";
-    table.add(record);
-    record.key = 1050;
-    record.fullName = "Kirill Mokhovichenko6";
-    table.add(record);
-    record.key = 1060;
-    record.fullName = "Kirill Mokhovichenko7";
-    table.add(record);
-    record.key = 1070;
-    record.fullName = "Kirill Mokhovichenko8";
-    table.add(record);
-    record.key = 1080;
-    record.fullName = "Kirill Mokhovichenko9";
-    table.add(record);
-    record.key = 1090;
+
+    record.key = 1009;
     record.fullName = "Kirill Mokhovichenko10";
-    table.add(record);
 
-    record.key = 9139;
-    record.fullName = "Таблица полная";
-    table.add(record);
+    for (int i=0;i<8;i++){
+
+        table.add(record);
+        record.key = record.key+1000-1;
+        record.fullName[0] += 1;
+
+    }
+
+
+ table.print();
+
+
+
+    for (int i=0;i<8;i++){
+
+
+        table.deleteRecord(record);
+        record.key = record.key-2000+2;
+        record.fullName[0] -= 2;
+
+    }
+
+
+
 
     table.print();
 
 
-    record.key = 9099;
+    record.key = 1119;
     record.fullName = "Kirill Mokhovichenko10";
-    table.deleteRecord(record);
+
+    for (int i=0;i<10;i++){
+
+        table.add(record);
+        record.key = record.key+1000-1;
+        record.fullName[0] += 1;
+
+    }
+
 
     table.print();
 
-    record.key = 9069;
-    record.fullName = "Ключ не уникльный";
-    table.add(record);
 
-    record.key = 9059;
-    record.fullName = "Kirill Mokhovichenko6";
-    table.deleteRecord(record);
+    record.key = 1009;
+    record.fullName = "Kirill Mokhovichenko10";
+
+    for (int i=0;i<8;i++){
+
+        table.add(record);
+        record.key = record.key+1000-1;
+        record.fullName[0] += 1;
+
+    }
+
 
     table.print();
 
+
+
+    for (int i=0;i<8;i++){
+       cout<<"del "<<record.fullName<<" "<<record.key<<endl;
+
+        table.deleteRecord(record);
+        record.key = record.key-1000+1;
+        record.fullName[0] -= 1;
+
+    }
+
+
+
+
+    table.print();
+
+
+
+
+
+record.key = 1109;
+record.fullName = "Kirill";
+
+for (int i=0;i<8;i++){
+
+table.add(record);
+record.key = record.key+1000-1;
+record.fullName[0] += 1;
+
+}
+
+
+table.print();
 }
